@@ -27,9 +27,9 @@ public class UserRestControl {
  
 	// http://localhost:????/timesheet-devops/retrieve-user/{user-id}
 	@GetMapping("/retrieve-user/{user-id}")
-	public User retrieveUser(@PathVariable("user-id") String userId) {
-		return userService.retrieveUser(userId);
-	}
+public User retrieveUser(@PathVariable("user-id") Long userId) {
+    return userService.retrieveUser(userId);
+}
 	
 	 
 
@@ -43,10 +43,10 @@ public class UserRestControl {
 	
 	// Supprimer User : 
 	// http://localhost:????/timesheet-devops/remove-user/{user-id}
-	@DeleteMapping("/remove-user/{user-id}") 
-	public void removeUser(@PathVariable("user-id") String userId) { 
-		userService.deleteUser(userId);
-	} 
+	@DeleteMapping("/remove-user/{user-id}")
+public void removeUser(@PathVariable("user-id") Long userId) {
+    userService.deleteUser(userId);
+}
 
 	// Modifier User 
 	// http://localhost:????/timesheet-devops/modify-user 
