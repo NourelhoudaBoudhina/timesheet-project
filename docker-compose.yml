@@ -1,32 +1,39 @@
 version: '3.8'
+
 services:
-  db:
+
+  mysqldb:
     image: mysql:5.7
     container_name: mysql-timesheet
+    restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_DATABASE=timesheet
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: timesheet
+      MYSQL_USER: timesheetuser
+      MYSQL_PASSWORD: timesheetpass
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - timesheetvol:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   app:
-    image: timesheet-nourelhoudaboudhina-2alinfo1:latest
+    build: .
+    image: timesheet-nourelhoudaboudhina-2alinfo1
     container_name: timesheet-app
     ports:
       - "8082:8082"
     depends_on:
-      db:
+      mysqldb:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/timesheet?useSSL=false
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=1234
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/timesheet?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: timesheetuser
+      SPRING_DATASOURCE_PASSWORD: timesheetpass
+
 volumes:
   timesheetvol:
